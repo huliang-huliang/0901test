@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			li{
+				list-style: none;
+				outline: 1px solid #EEEEEE;
+				color: #333333;
+				cursor: pointer;
+			}
+			.list li{
+				height: 50px;
+				line-height: 50px;
+			}
+			.control{
+				width: 100%;
+				display: flex;
+				position: fixed;
+				bottom: 0px;
+				left:0px
+			}
+			.control li{
+				flex: 1;
+				text-align: center;
+				height: 30px;
+				line-height: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<p>音乐列表</p>
+		<audio id="myAudio" src="music/no1.mp3"></audio>
+		<ul class="list" id="list">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+		</ul>
+		<ul class="control">
+			<li id="prev">上一首</li>
+			<li id="pl">播放</li>
+			<li id="next">下一首</li>
+			<li id="suiji">随便听听</li>
+		</ul>
+		
+	</body>
+	<script>
+			var myAudio = document.getElementById("myAudio");
+			var playDom = document.getElementById("pl");
+			var list = document.getElementById("list");
+			var aLi = list.getElementsByTagName("li");
+			var flag=0; //0代表暂停状态,1代表播放状态
+			//1.点击播放,音乐播放
+			playDom.onclick=function(){
+				if(flag==0){
+					myAudio.play();
+					flag=1;
+					playDom.innerHTML="暂停";
+				}else{
+					myAudio.pause();
+					flag=0;
+					playDom.innerHTML="播放";
+				};
+			};
+			//2.点击音乐列表,播放对应的音乐
+			for(var i=0;i<aLi.length;i++){
+				aLi[i].mark=i;
+				aLi[i].onclick=function(){
+					myAudio.src="music/no"+this.mark+".mp3";
+					myAudio.load();
+					myAudio.play();
+					flag=1;
+					playDom.innerHTML="暂停";
+				};
+			};
+			//点击上一首
+			var prev=document.getElementById("prev");
+			prev.onclick=function(){
+				var index=myAudio.getAttribute("src");
+				//console.log(index);
+				var a=index.split("o")[1];
+				var b=a.split(".")[0];
+				var B=parseInt(b);
+				//console.log(b);
+				var num=0;
+				if(B>0 && B<=5){
+					num=B-1;
+					myAudio.src="music/no"+num+".mp3";
+					myAudio.load();
+					myAudio.play();
+					flag=1;
+					playDom.innerHTML="暂停";
+				};
+				if(B=0){
+					num=5;
+					myAudio.src="music/no"+num+".mp3";
+					myAudio.load();
+					myAudio.play();
+					flag=1;
+					playDom.innerHTML="暂停";
+				};
+			};
+			
+			//点击下一首
+			var next=document.getElementById("next");
+			next.onclick=function(){
+				var index=myAudio.getAttribute("src");
+				var c=index.split("o")[1];
+				var d=c.split(".")[0];
+				var D=parseInt(d);
+				var num=0;
+				if(D>=0 && D<5){
+					num=D+1;
+					myAudio.src="music/no"+num+".mp3";
+					myAudio.load();
+					myAudio.play();
+					flag=1;
+					playDom.innerHTML="暂停";
+				}else if(D=5){
+					D=0;
+					num=D;
+					myAudio.src="music/no"+num+".mp3";
+					myAudio.load();
+					myAudio.play();
+					flag=1;
+					playDom.innerHTML="暂停";
+				};
+			};
+			
+			//随机播放
+			var suiji=document.getElementById("suiji");
+			suiji.onclick=function(){
+				var number=parseInt(Math.random()*6);
+				myAudio.src="music/no"+number+".mp3";
+				myAudio.load();
+				myAudio.play();
+				flag=1;
+				playDom.innerHTML="暂停";
+			};
+		</script>
+</html>
